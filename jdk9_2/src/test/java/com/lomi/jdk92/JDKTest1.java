@@ -165,10 +165,10 @@ public class JDKTest1 {
 
 
     /**
-     * 新的 stream api   Zzhangyu123
+     * 新的 stream api
      */
     @Test
-    public void streamApi() throws IOException {
+    public void test7() throws IOException {
 
         //takeWhile（第一个不满足条件一户的都会删除）
         System.out.println( Stream.of(1, 2, 3, 4, 5, 6, 7, 8).takeWhile(item -> (item < 3)).toArray().length );
@@ -185,6 +185,20 @@ public class JDKTest1 {
 
         //iterate 自带退出条件
         Stream.iterate( 0,item->item<100,item->item+1 ).forEach(System.out::println);
+
+    }
+
+
+
+
+
+    /**
+     *  nashorn 引擎
+     */
+    @Test
+    public void test8() throws IOException {
+
+
 
     }
 

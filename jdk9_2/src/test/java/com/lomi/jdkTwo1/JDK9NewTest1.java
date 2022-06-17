@@ -252,7 +252,6 @@ public class JDK9NewTest1 {
         //impl1.methodProvide();
 
 
-
     }
 
 

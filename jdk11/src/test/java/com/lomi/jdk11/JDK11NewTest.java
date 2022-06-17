@@ -1,8 +1,17 @@
 package com.lomi.jdk11;
 
 import org.junit.Test;
+import org.junit.validator.AnnotationValidator;
+import org.junit.validator.ValidateWith;
 
+import javax.xml.transform.stax.StAXSource;
 import java.io.*;
+import java.net.HttpURLConnection;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
 import java.util.*;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
@@ -21,9 +30,14 @@ public class JDK11NewTest {
     @Test
     public <s> void test1(){
 
-        /*Consumer<String> supplier = ( @Deprecated s )->{
+        //这种一直都可以
+        @Deprecated
+        Long a = 1L;
 
-        };*/
+        //在jdk10 上是不能这样用的，用注解直接在var 标注的局部变量上加验证
+        Consumer<String> supplier = ( @ValidateWith(AnnotationValidator.class) var s )->{
+
+        };
 
 
 
@@ -71,6 +85,21 @@ public class JDK11NewTest {
         System.out.println( !Optional.ofNullable( new ArrayList<String>() ).isPresent() );
     }
 
+
+    /**
+     *  内置 HttpClient  代替  HttpURLConnecttion
+     */
+    @Test
+    public <s> void test4() throws URISyntaxException, IOException, InterruptedException {
+        //比 HttpURLConnecttion 简单和很多，但是 我重来没用过 HttpURLConnecttion，以前也是用的三方的HttpClient
+        HttpClient httpClient = HttpClient.newBuilder().build();
+        HttpRequest httpRequest = HttpRequest.newBuilder().GET().uri(new URI("https://www.baidu.com/")).build();
+        HttpResponse.BodyHandler<String> stringBodyHandler = HttpResponse.BodyHandlers.ofString();
+        String  stringBody = httpClient.send(httpRequest,stringBodyHandler).body();
+        System.out.println( stringBody );
+
+        // HttpURLConnecttion 需要放回结果 是一个输入流，需要手动的读这个流然后再包装成Strin
+    }
 
 
 

@@ -27,7 +27,7 @@ public class JDK9NewTest1 {
 
 
         //Book的包没有被暴露出来，不能使用（但是目前版本的编译并不会保存，估计后面版本会优化），下面的代码允许会抛出异常
-        Book book = new Book();
+        //Book book = new Book();
 
         System.out.println(  shoppingCart );
 
@@ -148,7 +148,7 @@ public class JDK9NewTest1 {
 
 
         //jdk9写法（List.Set,Map都有类似的方法），为啥作者要把同样的方法写10 次？
-        Set<Integer> set = Set.of(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1);
+        Set<Integer> set = Set.of(1, 2);
         Map.ofEntries( Map.entry("key","value") );
 
     }

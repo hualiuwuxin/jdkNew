@@ -234,12 +234,33 @@ public class JDK9NewTest1 {
 
     }
 
+    /**
+     * 私有方法
+     */
+    @Test
+    public void test9(){
+        Impl1 impl1 = new Impl1();
+        Impl2 impl2 = new Impl2();
+
+        impl1.methodDefault();
+        impl1.methodNotmal();
+
+        //接口的静态方法只能通过接口名字调用，不能通过实例对象调用
+        Interface1.methodStatic();
+
+        //私有方法只能自己调用
+        //impl1.methodProvide();
+
+
+
+    }
+
 
     /**
      *  nashorn 引擎
      */
     @Test
-    public void test9() throws IOException {
+    public void test10() throws IOException {
 
         //后面的jdk版本删除了，没继续了解
     }

@@ -1,6 +1,6 @@
-package com.lomi.jdk92;
+package com.lomi.jdkTwo1;
 
-import com.lomi.jdk91.Goods;
+import com.lomi.jdk9One1.Goods;
 
 /**
  * @author ZHANGYUKUN

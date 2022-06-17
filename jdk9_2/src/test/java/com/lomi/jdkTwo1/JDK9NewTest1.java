@@ -1,7 +1,7 @@
-package com.lomi.jdk92;
+package com.lomi.jdkTwo1;
 
-import com.lomi.jdk91.Goods;
-import com.lomi.jdk92.ShoppingCart;
+import com.lomi.jdk9One1.Goods;
+import com.lomi.jdk9One2.Book;
 import org.junit.Test;
 
 import java.io.*;
@@ -12,16 +12,22 @@ import java.util.stream.Stream;
  * @author ZHANGYUKUN
  * @date 2022/6/16
  */
-public class JDKTest1 {
+public class JDK9NewTest1 {
 
 
     /**
-     * 使用模块
+     * 使用模块,相当于在package 上面 多了一层，如果在classpath 根目录有了 module-info.java 文件，那么引用的jar包就不是全部使用，而需要在 module-info.java 里面声明使用
      */
     @Test
     public void test1(){
+        //Goods的包被暴露出来可以倍使用（如果不导入模块，就使用，是不能编译通过，除非当前工程不使用模块化管理）
+        //模块化管理是相互的，需要 引用方和被引用方都 使用模块化管理才有效
         ShoppingCart shoppingCart = new ShoppingCart();
         shoppingCart.getGoodsList().add( new Goods() );
+
+
+        //Book的包没有被暴露出来，不能使用（但是目前版本的编译并不会保存，估计后面版本会优化），下面的代码允许会抛出异常
+        Book book = new Book();
 
         System.out.println(  shoppingCart );
 
@@ -56,7 +62,7 @@ public class JDKTest1 {
 
 
     /**
-     *  对try 自动关闭资源的优化
+     *  对try 自动关闭资源的优化，可以使用try外部定义的AutoCloseable资源
      */
     @Test
     public void test3() throws IOException {
@@ -118,12 +124,15 @@ public class JDKTest1 {
      */
     @Test
     public void test4() throws IOException {
+        //char 是2 个字节，byte 是一个字节，jvm 内部的 编码是 UTF-16或者是定长2字节的UES2，现在才是动长的 UTF-16(短的用1个字节，长的用2个字节，2个字节转不下的用4个字节)
+        //这样做的原因是大多数时候程序的字符串都是 ASCII 编码可以表示的(一个字节就够了)，全都用2个字节太浪费内存
 
     }
 
 
     /**
      *  只读集合的工厂方法
+     *  三大集合 提供了of方法，没有jdk8 允许了接口的静态方法，所以现在 of的工厂方法都由 三大集合接口提供，而不是 Collections 提供
      */
     @Test
     public void test5() throws IOException {
@@ -146,12 +155,13 @@ public class JDKTest1 {
 
     /**
      *  直接把 输入流 对接到输出流（自带8K缓冲区），怎么获取路径？
+     *  输入流，提供 transferTo 方法
      */
     @Test
     public void test6() throws IOException {
 
         try(
-                InputStream inputStream = JDKTest1.class.getClassLoader().getResourceAsStream("a.txt");
+                InputStream inputStream = JDK9NewTest1.class.getClassLoader().getResourceAsStream("a.txt");
                 FileOutputStream outputStream = new FileOutputStream( "b.txt"  );
         ){
 
@@ -165,7 +175,7 @@ public class JDKTest1 {
 
 
     /**
-     * 新的 stream api
+     * stream api 新增了4个方法takeWhile,dropWhile,ofNullable,自带退出条件的iterate
      */
     @Test
     public void test7() throws IOException {
@@ -186,20 +196,52 @@ public class JDKTest1 {
         //iterate 自带退出条件
         Stream.iterate( 0,item->item<100,item->item+1 ).forEach(System.out::println);
 
+
+
     }
 
 
+    /**
+     *  Optional 的一些新方法 ifPresentOrElse()，or()，stream()
+     */
+    @Test
+    public void test8() throws IOException {
 
+        //Optional.or 空值的时候返回 一个默认的 Optional
+        String value = null;
+        Optional optional =  Optional.ofNullable( value );
+        optional = optional.or( ()-> Optional.of("默认值")  );
+       // System.out.println("结果：" + optional.get() );
+
+
+        //不为空调用方法A，为空调用方法2（ 和  optional.orElseThrow() 类似 ）
+        optional.ifPresentOrElse(System.out::println,()->{
+            System.out.println("是空");
+        });
+
+
+
+
+
+
+        //jdk8有的方法，和 orElse 的加强版
+        optional.orElseGet( ()->"默认值" );
+
+
+        //平铺的optional（其实也没有平铺，重点在map Optional ）
+        List<String> list = null;
+        Optional<String> s = Optional.ofNullable(list).flatMap(item -> Optional.of(item.get(0)));
+
+    }
 
 
     /**
      *  nashorn 引擎
      */
     @Test
-    public void test8() throws IOException {
+    public void test9() throws IOException {
 
-
-
+        //后面的jdk版本删除了，没继续了解
     }
 
 

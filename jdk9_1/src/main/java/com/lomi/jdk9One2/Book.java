@@ -1,6 +1,6 @@
-package com.lomi.jdk91;
+package com.lomi.jdk9One2;
 
-public class Goods {
+public class Book {
 	
 	private Long id;
 	private Integer stock;
